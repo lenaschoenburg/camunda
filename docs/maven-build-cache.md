@@ -176,4 +176,3 @@ Remote cache allows multiple developers and CI builds to share cached artifacts.
 - [Apache Maven Build Cache Extension Documentation](https://maven.apache.org/extensions/maven-build-cache-extension/)
 - [Getting Started Guide](https://maven.apache.org/extensions/maven-build-cache-extension/getting-started.html)
 - [Configuration Reference](https://maven.apache.org/extensions/maven-build-cache-extension/build-cache-config.html)
-
