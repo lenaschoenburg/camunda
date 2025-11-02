@@ -1,6 +1,35 @@
 # Maven Build Cache Extension
 
-This project uses the [Apache Maven Build Cache Extension](https://maven.apache.org/extensions/maven-build-cache-extension/) to speed up builds by caching outputs from previous builds.
+This project has the [Apache Maven Build Cache Extension](https://maven.apache.org/extensions/maven-build-cache-extension/) available to speed up builds by caching outputs from previous builds.
+
+> [!NOTE]
+> The build cache is **disabled by default**. You need to opt-in to use it.
+
+## Enabling the Cache
+
+To enable the build cache, add `-Dmaven.build.cache.enabled=true` to your Maven command:
+
+```bash
+./mvnw install -Dquickly -T1C -Dmaven.build.cache.enabled=true
+```
+
+Alternatively, you can enable it persistently by setting the property in your `~/.m2/settings.xml`:
+
+```xml
+<settings>
+  <profiles>
+    <profile>
+      <id>build-cache</id>
+      <properties>
+        <maven.build.cache.enabled>true</maven.build.cache.enabled>
+      </properties>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>build-cache</activeProfile>
+  </activeProfiles>
+</settings>
+```
 
 ## Overview
 
@@ -43,20 +72,23 @@ Contains the cache configuration including:
 
 ## Build Commands
 
-The cache extension works transparently with all Maven commands:
+When enabled, the cache extension works transparently with all Maven commands:
 
 ```bash
-# Quick build (uses cache)
-./mvnw install -Dquickly -T1C
+# Quick build (with cache enabled)
+./mvnw install -Dquickly -T1C -Dmaven.build.cache.enabled=true
 
-# Full build (uses cache)
-./mvnw clean install
+# Full build (with cache enabled)
+./mvnw clean install -Dmaven.build.cache.enabled=true
 
-# Build with specific modules
-./mvnw install -pl :module-name -am
+# Build with specific modules (with cache enabled)
+./mvnw install -pl :module-name -am -Dmaven.build.cache.enabled=true
 
 # Parallel builds work with cache
-./mvnw install -T1C
+./mvnw install -T1C -Dmaven.build.cache.enabled=true
+
+# Normal builds without cache (default behavior)
+./mvnw install -Dquickly -T1C
 ```
 
 ## Cache Management
@@ -81,7 +113,7 @@ The cache will automatically maintain up to 100 cached builds and remove older e
 
 ### Disabling the Cache
 
-To temporarily disable the cache for a single build:
+The cache is disabled by default. If you have enabled it in your `~/.m2/settings.xml` but want to temporarily disable it for a single build:
 
 ```bash
 ./mvnw install -Dmaven.build.cache.enabled=false
@@ -176,3 +208,4 @@ Remote cache allows multiple developers and CI builds to share cached artifacts.
 - [Apache Maven Build Cache Extension Documentation](https://maven.apache.org/extensions/maven-build-cache-extension/)
 - [Getting Started Guide](https://maven.apache.org/extensions/maven-build-cache-extension/getting-started.html)
 - [Configuration Reference](https://maven.apache.org/extensions/maven-build-cache-extension/build-cache-config.html)
+
