@@ -15,4 +15,15 @@
     <artifactId>maven-profiler</artifactId>
     <version>3.3</version>
   </extension>
+
+  <!--
+       Maven Build Cache Extension https://maven.apache.org/extensions/maven-build-cache-extension/
+       Caches build outputs to speed up builds. Supports local and remote caching.
+       Configuration in maven-build-cache-config.xml
+  -->
+  <extension>
+    <groupId>org.apache.maven.extensions</groupId>
+    <artifactId>maven-build-cache-extension</artifactId>
+    <version>1.2.0</version>
+  </extension>
 </extensions>

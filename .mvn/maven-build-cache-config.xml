@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cache xmlns="http://maven.apache.org/BUILD-CACHE-CONFIG/1.2.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://maven.apache.org/BUILD-CACHE-CONFIG/1.2.0 https://maven.apache.org/xsd/build-cache-config-1.2.0.xsd">
+  <configuration>
+    <!-- Enable the build cache -->
+    <enabled>true</enabled>
+    
+    <!-- Use SHA-256 for cache key computation -->
+    <hashAlgorithm>SHA-256</hashAlgorithm>
+    
+    <!-- Multi-module project configuration -->
+    <multiModule>
+      <discovery>
+        <scanProfiles/>
+      </discovery>
+    </multiModule>
+    
+    <!-- Local cache configuration -->
+    <local>
+      <!-- Store cache in the default location: ${user.home}/.m2/build-cache -->
+      <maxBuildsCached>100</maxBuildsCached>
+    </local>
+    
+    <!-- Remote cache disabled by default (can be enabled for CI/CD) -->
+    <remote enabled="false"/>
+  </configuration>
+  
+  <!-- Input configuration - what files are considered for cache key calculation -->
+  <input>
+    <global>
+      <!-- Exclude IDE and OS-specific files from cache key calculation -->
+      <excludes>
+        <exclude glob=".idea/**"/>
+        <exclude glob="**/*.iml"/>
+        <exclude glob="**/.DS_Store"/>
+        <exclude glob="**/.settings/**"/>
+        <exclude glob="**/.project"/>
+        <exclude glob="**/.classpath"/>
+        <exclude glob="**/target/**"/>
+        <exclude glob="**/node_modules/**"/>
+        <exclude glob="**/.mvn/wrapper/**"/>
+      </excludes>
+    </global>
+    
+    <plugins>
+      <!-- Maven Compiler Plugin -->
+      <plugin groupId="org.apache.maven.plugins" artifactId="maven-compiler-plugin">
+        <dirScan mode="default">
+          <excludes>
+            <!-- Don't hash the output directory -->
+            <exclude tagName="outputs"/>
+          </excludes>
+        </dirScan>
+      </plugin>
+      
+      <!-- Maven Surefire Plugin (Unit Tests) -->
+      <plugin groupId="org.apache.maven.plugins" artifactId="maven-surefire-plugin">
+        <dirScan mode="default">
+          <excludes>
+            <exclude tagName="outputs"/>
+          </excludes>
+        </dirScan>
+      </plugin>
+      
+      <!-- Maven Failsafe Plugin (Integration Tests) -->
+      <plugin groupId="org.apache.maven.plugins" artifactId="maven-failsafe-plugin">
+        <dirScan mode="default">
+          <excludes>
+            <exclude tagName="outputs"/>
+          </excludes>
+        </dirScan>
+      </plugin>
+      
+      <!-- Maven JAR Plugin -->
+      <plugin groupId="org.apache.maven.plugins" artifactId="maven-jar-plugin">
+        <dirScan mode="default">
+          <excludes>
+            <exclude tagName="outputs"/>
+          </excludes>
+        </dirScan>
+      </plugin>
+      
+      <!-- Spotless Plugin - Exclude generated files -->
+      <plugin groupId="com.diffplug.spotless" artifactId="spotless-maven-plugin">
+        <dirScan mode="default">
+          <excludes>
+            <exclude tagName="outputs"/>
+          </excludes>
+        </dirScan>
+      </plugin>
+    </plugins>
+  </input>
+  
+
+</cache>
